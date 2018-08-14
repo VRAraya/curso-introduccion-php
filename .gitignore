@@ -1,1 +1,4 @@
-vendor
+vendor/
+._composer.phar
+composer.phar
+._.DS_Store
