@@ -42,43 +42,43 @@ $request = Zend\Diactoros\ServerRequestFactory::fromGlobals(
 
 $routerContainer = new RouterContainer();
 $map = $routerContainer->getMap();
-$map->get('index', 'curso-introduccion-php-vraraya/', [
+$map->get('index', '/', [
     'controller' => 'App\Controllers\IndexController',
     'action' => 'indexAction'
 ]);
-$map->get('addJobs', 'curso-introduccion-php-vraraya/jobs/add', [
+$map->get('addJobs', '/jobs/add', [
     'controller' => 'App\Controllers\JobsController',
     'action' => 'getAddJobAction',
     'auth' => true
 ]);
-$map->post('saveJobs', 'curso-introduccion-php-vraraya/jobs/add', [
+$map->post('saveJobs', '/jobs/add', [
     'controller' => 'App\Controllers\JobsController',
     'action' => 'getAddJobAction',
     'auth' => true
 ]);
-$map->get('addUser', 'curso-introduccion-php-vraraya/users/add', [
+$map->get('addUser', '/users/add', [
     'controller' => 'App\Controllers\UsersController',
     'action' => 'getAddUser',
     'auth' => true
 ]);
-$map->post('saveUser', 'curso-introduccion-php-vraraya/users/save', [
+$map->post('saveUser', '/users/save', [
     'controller' => 'App\Controllers\UsersController',
     'action' => 'postSaveUser',
     'auth' => true
 ]);
-$map->get('loginForm', 'curso-introduccion-php-vraraya/login', [
+$map->get('loginForm', '/login', [
     'controller' => 'App\Controllers\AuthController',
     'action' => 'getLogin'
 ]);
-$map->get('logout', 'curso-introduccion-php-vraraya/logout', [
+$map->get('logout', '/logout', [
     'controller' => 'App\Controllers\AuthController',
     'action' => 'getLogout'
 ]);
-$map->post('auth', 'curso-introduccion-php-vraraya/auth', [
+$map->post('auth', '/auth', [
     'controller' => 'App\Controllers\AuthController',
     'action' => 'postLogin'
 ]);
-$map->get('admin', 'curso-introduccion-php-vraraya/admin', [
+$map->get('admin', '/admin', [
     'controller' => 'App\Controllers\AdminController',
     'action' => 'getIndex',
     'auth' => true
