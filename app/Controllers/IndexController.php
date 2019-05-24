@@ -12,7 +12,7 @@ class IndexController extends BaseController {
             $project1
         ];
 
-        $name = 'Hector Benitez';
+        $name = 'Victor Araya Romero';
         $limitMonths = 2000;
 
         return $this->renderHTML('index.twig', [
