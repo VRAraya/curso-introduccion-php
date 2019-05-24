@@ -6,6 +6,11 @@ error_reporting(E_ALL);
 
 require_once '../vendor/autoload.php';
 
+session_start();
+
+$dotenv = Dotenv\Dotenv::create(__DIR__.'/curso-introduccion-php/..');
+$dotenv->load();
+
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Aura\Router\RouterContainer;
 
@@ -13,10 +18,10 @@ $capsule = new Capsule;
 
 $capsule->addConnection([
     'driver'    => 'mysql',
-    'host'      => 'localhost',
-    'database'  => 'cursophp',
-    'username'  => 'root',
-    'password'  => '',
+    'host'      => getenv('DB_HOST'),
+    'database'  => getenv('DB_NAME'),
+    'username'  => getenv('DB_USER'),
+    'password'  => getenv('DB_PASS'),
     'charset'   => 'utf8',
     'collation' => 'utf8_unicode_ci',
     'prefix'    => '',
@@ -37,25 +42,46 @@ $request = Zend\Diactoros\ServerRequestFactory::fromGlobals(
 
 $routerContainer = new RouterContainer();
 $map = $routerContainer->getMap();
-$map->get('index', '/', [
+$map->get('index', '/curso-introduccion-php/', [
     'controller' => 'App\Controllers\IndexController',
     'action' => 'indexAction'
 ]);
-$map->get('addJobs', '/jobs/add', [
+$map->get('addJobs', '/curso-introduccion-php/jobs/add', [
     'controller' => 'App\Controllers\JobsController',
-    'action' => 'getAddJobAction'
+    'action' => 'getAddJobAction',
+    'auth' => true
 ]);
-$map->post('saveJobs', '/jobs/add', [
+$map->post('saveJobs', '/curso-introduccion-php/jobs/add', [
     'controller' => 'App\Controllers\JobsController',
-    'action' => 'getAddJobAction'
+    'action' => 'getAddJobAction',
+    'auth' => true
 ]);
-$map->get('addUser', '/users/add', [
+$map->get('addUser', '/curso-introduccion-php/users/add', [
     'controller' => 'App\Controllers\UsersController',
-    'action' => 'getAddUser'
+    'action' => 'getAddUser',
+    'auth' => true
 ]);
-$map->post('saveUser', '/users/save', [
+$map->post('saveUser', '/curso-introduccion-php/users/save', [
     'controller' => 'App\Controllers\UsersController',
-    'action' => 'postSaveUser'
+    'action' => 'postSaveUser',
+    'auth' => true
+]);
+$map->get('loginForm', '/curso-introduccion-php/login', [
+    'controller' => 'App\Controllers\AuthController',
+    'action' => 'getLogin'
+]);
+$map->get('logout', '/curso-introduccion-php/logout', [
+    'controller' => 'App\Controllers\AuthController',
+    'action' => 'getLogout'
+]);
+$map->post('auth', '/curso-introduccion-php/auth', [
+    'controller' => 'App\Controllers\AuthController',
+    'action' => 'postLogin'
+]);
+$map->get('admin', '/curso-introduccion-php/admin', [
+    'controller' => 'App\Controllers\AdminController',
+    'action' => 'getIndex',
+    'auth' => true
 ]);
 
 $matcher = $routerContainer->getMatcher();
@@ -83,11 +109,29 @@ if (!$route) {
     echo 'No route';
 } else {
     $handlerData = $route->handler;
-    $controllerName = $handlerData['controller'];
-    $actionName = $handlerData['action'];
+
+    $needsAuth = $handlerData['auth'] ?? false;
+    $sessionUserId = $_SESSION['userId'] ?? null;
+
+    if($needsAuth && !$sessionUserId) {
+        $controllerName = 'App\Controllers\AuthController';
+        $actionName = 'getLoginRequired';
+     } else {
+        $controllerName = $handlerData['controller'];
+        $actionName = $handlerData['action'];
+     }
 
     $controller = new $controllerName;
     $response = $controller->$actionName($request);
 
+    foreach($response->getHeaders() as $name => $values)
+    {
+        foreach($values as $value) {
+            
+            header(sprintf('%s: %s', $name, $value), false);
+        }
+    }
+    http_response_code($response->getStatusCode());
     echo $response->getBody();
 }
+
