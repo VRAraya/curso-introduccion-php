@@ -42,43 +42,43 @@ $request = Zend\Diactoros\ServerRequestFactory::fromGlobals(
 
 $routerContainer = new RouterContainer();
 $map = $routerContainer->getMap();
-$map->get('index', '/curso-introduccion-php-vraraya/', [
+$map->get('index', 'curso-introduccion-php-vraraya/', [
     'controller' => 'App\Controllers\IndexController',
     'action' => 'indexAction'
 ]);
-$map->get('addJobs', '/curso-introduccion-php/jobs/add', [
+$map->get('addJobs', 'curso-introduccion-php-vraraya/jobs/add', [
     'controller' => 'App\Controllers\JobsController',
     'action' => 'getAddJobAction',
     'auth' => true
 ]);
-$map->post('saveJobs', '/curso-introduccion-php/jobs/add', [
+$map->post('saveJobs', 'curso-introduccion-php-vraraya/jobs/add', [
     'controller' => 'App\Controllers\JobsController',
     'action' => 'getAddJobAction',
     'auth' => true
 ]);
-$map->get('addUser', '/curso-introduccion-php/users/add', [
+$map->get('addUser', 'curso-introduccion-php-vraraya/users/add', [
     'controller' => 'App\Controllers\UsersController',
     'action' => 'getAddUser',
     'auth' => true
 ]);
-$map->post('saveUser', '/curso-introduccion-php/users/save', [
+$map->post('saveUser', 'curso-introduccion-php-vraraya/users/save', [
     'controller' => 'App\Controllers\UsersController',
     'action' => 'postSaveUser',
     'auth' => true
 ]);
-$map->get('loginForm', '/curso-introduccion-php/login', [
+$map->get('loginForm', 'curso-introduccion-php-vraraya/login', [
     'controller' => 'App\Controllers\AuthController',
     'action' => 'getLogin'
 ]);
-$map->get('logout', '/curso-introduccion-php/logout', [
+$map->get('logout', 'curso-introduccion-php-vraraya/logout', [
     'controller' => 'App\Controllers\AuthController',
     'action' => 'getLogout'
 ]);
-$map->post('auth', '/curso-introduccion-php/auth', [
+$map->post('auth', 'curso-introduccion-php-vraraya/auth', [
     'controller' => 'App\Controllers\AuthController',
     'action' => 'postLogin'
 ]);
-$map->get('admin', '/curso-introduccion-php/admin', [
+$map->get('admin', 'curso-introduccion-php-vraraya/admin', [
     'controller' => 'App\Controllers\AdminController',
     'action' => 'getIndex',
     'auth' => true
